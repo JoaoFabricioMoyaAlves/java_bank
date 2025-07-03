@@ -2,8 +2,12 @@ package java_bank.repository;
 
 import java_bank.model.AccountWallet;
 import static java_bank.repository.CommunsRepository.checkFoundsForTransaction;
+
+import java.text.ParseException;
 import java.util.List;
 import java_bank.expcetion.AccountNotFoundException;
+import java_bank.expcetion.PixUseException;
+
 import java.util.stream.Stream;
 import java_bank.repository.CommunsRepository;
 //import javax.security.auth.login.AccountNotFoundException;
@@ -14,6 +18,15 @@ public class AccountRepository {
     private List<AccountWallet> accounts;
 
     public AccountWallet create(final List<String> pix, final long initialFunds){
+
+        var pixInUse =  accounts.stream().flatMap(a -> a.getPix().stream()).toList();
+        for (var p : pix) {
+          if( pixInUse.contains(p)){
+ 
+            throw new PixUseException("O pix "+p+ " já está em uso");
+          }
+        }
+
         var newAccount = new AccountWallet(initialFunds, pix);
         accounts.add(newAccount);
         return newAccount;

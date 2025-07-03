@@ -18,6 +18,9 @@ public class InvestimentWallet extends Wallet {
     this.account = account;
     addMoney(account.reduceMoney(amount), getService(), "investimento");
    }
+   public AccountWallet getAccount(){
+     return this.account;
+   }
 
    public void updateAmount(final long percent){
         var amount = getFounds() * percent / 100;
