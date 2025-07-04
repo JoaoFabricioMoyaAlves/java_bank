@@ -4,6 +4,7 @@ import java_bank.model.AccountWallet;
 import static java_bank.repository.CommunsRepository.checkFoundsForTransaction;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java_bank.expcetion.AccountNotFoundException;
 import java_bank.expcetion.PixUseException;
@@ -15,10 +16,10 @@ import java_bank.repository.CommunsRepository;
 
 public class AccountRepository {
 
-    private List<AccountWallet> accounts;
+    private final List<AccountWallet> accounts = new ArrayList<>();
 
     public AccountWallet create(final List<String> pix, final long initialFunds){
-
+      if(!accounts.isEmpty()){
         var pixInUse =  accounts.stream().flatMap(a -> a.getPix().stream()).toList();
         for (var p : pix) {
           if( pixInUse.contains(p)){
@@ -26,10 +27,13 @@ public class AccountRepository {
             throw new PixUseException("O pix "+p+ " já está em uso");
           }
         }
-
+    }
         var newAccount = new AccountWallet(initialFunds, pix);
         accounts.add(newAccount);
         return newAccount;
+    }
+    public  List<AccountWallet> getHistory(){
+        return accounts;
     }
 
     public void deposit(final String pix, final long foundsAmount){

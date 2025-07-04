@@ -15,7 +15,7 @@ import java_bank.model.InvestimentWallet;
 
 public class InvestmentRepository {
     
-    private long nextId;
+    private long nextId = 0;
     private final List<Investiment> investiments = new ArrayList<>();
     private final List<InvestimentWallet> wallets = new ArrayList<>();
 
@@ -28,7 +28,8 @@ public class InvestmentRepository {
 
 
     public InvestimentWallet initInvestment(final AccountWallet account, final long id){
-
+          
+        if(!wallets.isEmpty()){
            var accountInUse =  wallets.stream().map(InvestimentWallet::getAccount).toList();
        
           if( accountInUse.contains(account)){
@@ -36,7 +37,7 @@ public class InvestmentRepository {
             throw new AccountWithInvestmentException("A conta "+account+ " já possui um investimento");
           }
         
-
+        }
         var investmant = findById(id);
         checkFoundsForTransaction(account, investmant.initialFunds());
         var wallet = new InvestimentWallet(investmant, account, investmant.initialFunds());
