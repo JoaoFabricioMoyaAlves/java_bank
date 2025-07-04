@@ -18,8 +18,13 @@ public class InvestimentWallet extends Wallet {
     this.account = account;
     addMoney(account.reduceMoney(amount), getService(), "investimento");
    }
+
    public AccountWallet getAccount(){
      return this.account;
+   }
+
+   public Investiment getInvestment(){
+     return investiment;
    }
 
    public void updateAmount(final long percent){
